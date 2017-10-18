@@ -1,87 +1,24 @@
-
 <?php
-
-	//connecting to the database
-	$db = mysqli_connect('localhost', 'root', '', 'proiect') or die($db);
-	
-	// Check connection
-	if (mysqli_connect_errno())
-	 {
-	  echo "Failed to connect to the database: " . mysqli_connect_error();
-	 }	
-	if(isset($_POST['username']) && isset($_POST['password'])) 
-	{
-	$username = mysqli_real_escape_string($db, $_POST["username"]);
-	$password = mysqli_real_escape_string($db, $_POST["password"]);
-	$password_md5=md5($password);
-	
-	$query = "SELECT username, password FROM users WHERE username='$username' AND password='$password_md5'";
-	$results = mysqli_query($db, $query);
-	
-	if(mysqli_num_rows($results) == 1)
-	{
-		$logged_in_user = mysqli_fetch_assoc($results);
-		echo "User logged in: ", $logged_in_user['username'];
-		session_start();
-		$_SESSION['username']=$username;
-				header('location: index.php');
-
-	}
-	else
-	{
-		echo "User not found. Would you like to ";
-		echo '<a href="createaccount.php">Register?</a>';
-	}
-	}
-	
-	
-
+	include_once 'header.php';
+	$message = isset($_GET['pass']) ? "You have entered a wrong password." 
+				: (isset($_GET['user']) ? "Username doesn't exist." 
+				: (isset($_GET['form']) ? "Insert your username and password." 
+				: (isset($_GET['logout']) ? "You have been logged out!" : null)));
 ?>
-
-
-<html>
-   
-   <head>
-      <title>Login Page</title>
-      
-      <style type = "text/css">
-         body {
-            font-family:Arial, Helvetica, sans-serif;
-            font-size:14px;
-         }
-         
-         label {
-            font-weight:bold;
-            width:100px;
-            font-size:14px;
-         }
-         
-         .box {
-            border:#666666 solid 1px;
-         }
-      </style>
-      
-   </head>
-   
-   <body bgcolor = "#FFFFFF">
+	<link rel="stylesheet" href="logins.css">
 	
-      <div align = "center">
-         <div style = "width:300px; border: solid 1px #333333; " align = "left">
-            <div style = "background-color:#333333; color:#FFFFFF; padding:3px;"><b>Login</b></div>
-				
-            <div style = "margin:30px">
-               
-               <form action = "" method = "post">
-                  <label>UserName  :</label><input type = "text" name = "username" class = "box"/><br /><br />
-                  <label>Password  :</label><input type = "password" name = "password" class = "box" /><br/><br />
-                  <input type = "submit" value = " Submit "/><br />
-               </form>
-            					
-            </div>
-				
-         </div>
-			
-      </div>
+	<div class="body-content">
+		<div class="module">
+		<br /><br /><h1>Log in to your account</h1>
+			<form class="form" action="signin.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+				<div class="alert alert-error"><?= $message ?></div>
+				<input type="text" placeholder="User / Email" name="username"/>
+				<input type="password" placeholder="Password" name="password"/>
+				<input type="submit" value="Log in" name="submit" class="btn btn-block btn-primary" />
+			</form>
+		</div>
+	</div>
 
-   </body>
-</html>
+<?php	
+	include_once 'footer.php';
+?>

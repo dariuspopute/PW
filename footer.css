@@ -1,0 +1,39 @@
+footer {
+	background-color: rgba(0, 0, 0, 1);
+	border-top: 3px solid rgba(0, 133, 196, 0.6);
+}
+
+.legal12 {
+	margin-top: 15px;
+}
+
+.pegi {
+	text-align: center;
+}
+
+.rights {
+	text-align: center;
+	color: rgb(235, 222, 194);
+}
+
+.follow {
+	margin-top: 30px;
+}
+
+.follow_title {
+	text-align: center;
+	color: rgb(235, 222, 194);
+	font-size: 1.5em;
+}
+
+.follow_links {
+	text-align: center;
+}
+
+.logo_footer {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+
