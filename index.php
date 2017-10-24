@@ -20,30 +20,13 @@
 					}
 				}
 	
-				$message = new Message();
-				
-				
-				$race="";		
+				$message = new Message();			
+		
 				$race_Query = "SELECT * FROM race";
 				$race_Result = mysqli_query($mysqli, $race_Query);
-				if (mysqli_num_rows($race_Result)>0)
-				{
-					while($row_race = mysqli_fetch_array($race_Result))
-					{
-						$race = $race . $row_race['id'];
-					}			
-				}
-				
-				$class="";		
+						
 				$class_Query = "SELECT * FROM class";
 				$class_Result = mysqli_query($mysqli, $class_Query);
-				if (mysqli_num_rows($class_Result)>0)
-				{
-					while($row_class = mysqli_fetch_array($class_Result))
-					{
-						$class = $class . $row_class['id'];
-					}			
-				}
 				
 				if (isset($_REQUEST['create']))
 				{
@@ -91,22 +74,14 @@
 						<div class="alert <?php echo $message->type == 0 ? "alert-error" : "alert-success"; ?>"><?= $message->message ?></div>
 							<input type="text" placeholder="Name " name="char_name"/>
 							<select name="char_race">
-								<option value="<?=  substr($race,0,1); ?>">Human</option>	
-								<option value="<?=  substr($race,1,1); ?>">Dwarf</option>	
-								<option value="<?=  substr($race,2,1); ?>">Elf</option>	
-								<option value="<?=  substr($race,3,1); ?>">Orc</option>	
-								<option value="<?=  substr($race,4,1); ?>">Troll</option>	
-								<option value="<?=  substr($race,5,1); ?>">Undead</option>	
+								<?php while($row_option1 = mysqli_fetch_array($race_Result)) { ?>
+									<option value="<?php echo $row_option1['id']; ?>"><?php echo $row_option1['Race']; ?></option>
+								<?php } ?>
 							</select>
 							<select name="char_class">
-								<option value="<?=  substr($class,0,1); ?>">Warrior</option>	
-								<option value="<?=  substr($class,1,1); ?>">Hunter</option>	
-								<option value="<?=  substr($class,2,1); ?>">Rogue</option>	
-								<option value="<?=  substr($class,3,1); ?>">Shaman</option>	
-								<option value="<?=  substr($class,4,1); ?>">Druid</option>	
-								<option value="<?=  substr($class,5,1); ?>">Priest</option>	
-								<option value="<?=  substr($class,6,1); ?>">Mage</option>	
-								<option value="<?=  substr($class,7,1); ?>">Warlock</option>	
+								<?php while($row_option2 = mysqli_fetch_array($class_Result)) { ?>
+									<option value="<?php echo $row_option2['id']; ?>"><?php echo $row_option2['Class']; ?></option>
+								<?php } ?>
 							</select>
 							<input type="number" placeholder="Level  " min=1 max=70 name="char_level"/>
 							<input type="submit" value="Create" name="create" class="btn btn-block btn-primary" />
@@ -117,7 +92,8 @@
 		<?php
 
 				
-				$sql=mysqli_query($mysqli,'SELECT * FROM characters WHERE userid=' . $_SESSION['u_id']);
+				$sql=mysqli_query($mysqli,'SELECT c.Name as Name, r.Race as Race, cl.Class as Class, c.Level as Level FROM characters c, class cl, race r 
+				                           WHERE r.id = c.Race and cl.id = c.Class and c.userid = ' . $_SESSION['u_id']);
 				
 		?>		<div>
 					<br/><h1 class="player_intro">CHARACTER LIST</h1><br/>
@@ -136,10 +112,8 @@
 					{ ?>
 						<div class="char_list">
 							<p class="pchars"><?php echo $row['Name']; ?></p>
-							<p class="pchars"><?php $sql2=mysqli_query($mysqli,'SELECT * FROM race WHERE id=' . $row['Race']);
-								$row2=mysqli_fetch_array($sql2); echo $row2['Race']; ?></p>
-							<p class="pchars"><?php $sql3=mysqli_query($mysqli,'SELECT * FROM class WHERE id=' . $row['Class']);
-								$row3=mysqli_fetch_array($sql3); echo $row3['Class'];	?></p>
+							<p class="pchars"><?php echo $row['Race']; ?></p>
+							<p class="pchars"><?php echo $row['Class']; ?></p>
 							<p class="pchars"><?php echo $row['Level']; ?></p>
 						</div>
 					<?php }
